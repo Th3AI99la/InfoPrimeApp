@@ -1,4 +1,4 @@
-# InfoPrimeApp 🛍️📱
+# InfoPrimeApp 
 
 Projeto de faculdade: app mobile em React Native (Expo) para gerenciar produtos de uma loja de informática, com CRUD completo e tema claro/escuro.
 
