@@ -31,13 +31,13 @@ public class ProdutoController {
     private ProdutoRepository pRep;
 
     //Listar todos os produtos
-    @GetMapping("/produtos") // Caminho completo será /api/produtos
+    @GetMapping("/produtos") 
     public List<Produto> listar(){
         return this.pRep.findAll();
     }
 
     //Consultar produto
-    @GetMapping("/produtos/{id}") // Caminho completo será /api/produtos/{id}
+    @GetMapping("/produtos/{id}")
     public ResponseEntity<Produto> consultar(@PathVariable Long id){
         Produto produto = pRep.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Produto nao encontrado: " + id));
@@ -45,15 +45,15 @@ public class ProdutoController {
     }
 
     //Inserir produto
-    @PostMapping("/produtos") // Caminho completo será /api/produtos
+    @PostMapping("/produtos") 
     public Produto inserir(@RequestBody Produto produto) {
         return pRep.save(produto);
     }
 
     //Excluir produto
-    @DeleteMapping("/produtos/{id}") // Caminho completo será /api/produtos/{id}
+    @DeleteMapping("/produtos/{id}") 
     public ResponseEntity<Map<String, Boolean>> excluir(@PathVariable Long id){
-        // ... lógica de exclusão ...
+
         Produto produto = pRep.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Produto nao encontrado: " + id));
         pRep.delete(produto);
@@ -63,9 +63,9 @@ public class ProdutoController {
     }
 
     //Alterar produto
-    @PutMapping("/produtos/{id}") // Caminho completo será /api/produtos/{id}
+    @PutMapping("/produtos/{id}") 
     public ResponseEntity<Produto> alterar(@PathVariable Long id, @RequestBody Produto produtoDetalhes){
-        // ... lógica de alteração como definida anteriormente ...
+
         Produto prodExistente = pRep.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Produto nao encontrado: " + id));
 

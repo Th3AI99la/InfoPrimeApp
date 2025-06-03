@@ -5,7 +5,6 @@ import {
   TextInput,
   Alert,
   ActivityIndicator,
-  useColorScheme,
   Pressable,
   Animated,
   KeyboardAvoidingView,
@@ -15,6 +14,7 @@ import {
 } from "react-native";
 import getThemedStyles from "./style";
 import api from "../../services/api";
+import { useTheme } from '../../context/ThemeContext';
 
 export default function AlterarProduto({ navigation, route }) {
   const {
@@ -34,11 +34,13 @@ export default function AlterarProduto({ navigation, route }) {
       : ""
   );
   const [descricao, setDescricao] = useState(descricaoInicial || "");
-  const [preco, setPreco] = useState(
-    precoInicial !== undefined && precoInicial !== null
-      ? precoInicial.toFixed(2).replace(".", ",")
-      : ""
-  );
+
+  const formatPriceForInput = (price) => {
+    if (price === undefined || price === null) return "";
+    const num = parseFloat(String(price).replace(',', '.'));
+    return isNaN(num) ? "" : num.toFixed(2).replace(".", ",");
+  };
+  const [preco, setPreco] = useState(formatPriceForInput(precoInicial));
   const [imagemUrl, setImagemUrl] = useState(imagemUrlInicial || "");
   const [disponivelOnline, setDisponivelOnline] = useState(
     disponivelOnlineInicial !== undefined ? disponivelOnlineInicial : false
@@ -47,10 +49,18 @@ export default function AlterarProduto({ navigation, route }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formError, setFormError] = useState(null);
 
-  const colorScheme = useColorScheme();
-  const styles = getThemedStyles(colorScheme === "dark");
+  const { themeMode } = useTheme();
+  const styles = getThemedStyles(themeMode === "dark");
 
   const animatedScale = useRef(new Animated.Value(1)).current;
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const handlePressIn = () => {
     Animated.spring(animatedScale, {
@@ -67,13 +77,6 @@ export default function AlterarProduto({ navigation, route }) {
       useNativeDriver: true
     }).start();
   };
-
-  const isMounted = useRef(true);
-  useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
 
   async function handleAlterarProduto() {
     setFormError(null);
@@ -96,7 +99,6 @@ export default function AlterarProduto({ navigation, route }) {
     }
 
     const produtoAtualizado = {
-      id: idProduto,
       nome: nome.trim(),
       quantidade: quantidadeNum,
       descricao: descricao.trim(),
@@ -131,7 +133,10 @@ export default function AlterarProduto({ navigation, route }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.keyboardAvoidingContainer}
     >
-      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+      >
         <Text style={styles.title}>Alterar Produto</Text>
 
         <Text style={styles.label}>Nome do Produto</Text>
@@ -157,13 +162,14 @@ export default function AlterarProduto({ navigation, route }) {
 
         <Text style={styles.label}>Descrição</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, styles.inputMultiline]}
           placeholder="Descrição detalhada do produto"
           placeholderTextColor={styles.placeholderText.color}
           onChangeText={setDescricao}
           value={descricao}
           multiline
           numberOfLines={3}
+          textAlignVertical="top"
           editable={!isLoading}
         />
 
@@ -173,13 +179,7 @@ export default function AlterarProduto({ navigation, route }) {
           placeholder="Ex: 299,90"
           placeholderTextColor={styles.placeholderText.color}
           keyboardType="numeric"
-          onChangeText={(text) => {
-            const onlyNumbers = text.replace(/[^0-9]/g, "");
-            const formatted = (Number(onlyNumbers) / 100)
-              .toFixed(2)
-              .replace(".", ",");
-            setPreco(formatted);
-          }}
+          onChangeText={setPreco}
           value={preco}
           editable={!isLoading}
         />
@@ -232,10 +232,7 @@ export default function AlterarProduto({ navigation, route }) {
 
         {isLoading && (
           <View style={styles.loadingOverlay}>
-            <ActivityIndicator
-              size="large"
-              color={styles.loadingIndicator.color}
-            />
+            <ActivityIndicator size="large" color={styles.loadingIndicator.color} />
             <Text style={styles.loadingText}>Salvando...</Text>
           </View>
         )}

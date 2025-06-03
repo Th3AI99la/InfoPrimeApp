@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react"; // Adicionado useRef para animatedScale
 import {
   View,
   Text,
   TextInput,
-  StyleSheet,
+  // StyleSheet, // Removido se getThemedStyles já lida com tudo
   Alert,
   ActivityIndicator,
-  useColorScheme,
+  // useColorScheme, // 👈 REMOVER
   Pressable,
   Animated,
   KeyboardAvoidingView,
   Platform,
   Switch,
+  ScrollView // Adicionado para conteúdos longos
 } from "react-native";
 import getThemedStyles from "./style";
 import api from "../../services/api";
+import { useTheme } from '../../context/ThemeContext'; // 👈 IMPORTAR useTheme
 
 export default function IncluirProduto({ navigation }) {
   const [nome, setNome] = useState("");
@@ -27,10 +29,13 @@ export default function IncluirProduto({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formError, setFormError] = useState(null);
 
-  const colorScheme = useColorScheme();
-  const styles = getThemedStyles(colorScheme === "dark");
+  const { themeMode } = useTheme(); // 👈 USAR themeMode do CONTEXTO
+  const styles = getThemedStyles(themeMode === "dark"); // 👈 USAR themeMode do CONTEXTO
 
-  const animatedScale = new Animated.Value(1);
+  const animatedScale = useRef(new Animated.Value(1)).current; // Usar useRef para Animated.Value
+
+  // ... (resto do seu componente IncluirProduto, como handlePressIn, handlePressOut, handleIncluirProduto)
+  // A lógica interna do componente não precisa mudar.
 
   const handlePressIn = () => {
     Animated.spring(animatedScale, {
@@ -63,7 +68,9 @@ export default function IncluirProduto({ navigation }) {
       return;
     }
 
-    const precoNum = parseFloat(preco);
+    // Ajuste para tratar vírgula ou ponto no preço
+    const precoLimpo = preco.replace(',', '.');
+    const precoNum = parseFloat(precoLimpo);
     if (isNaN(precoNum) || precoNum < 0) {
       setFormError("O preço deve ser um número válido.");
       return;
@@ -71,11 +78,12 @@ export default function IncluirProduto({ navigation }) {
 
     const novoProduto = {
       nome: nome.trim(),
-      quantidade: quantidadeNum,
+      quantidade: quantidadeNum, // No backend, este campo é 'quantidade'
       descricao: descricao.trim(),
       preco: precoNum,
       imagemUrl: imagemUrl.trim(),
       disponivelOnline,
+      // dataCadastro: new Date().toISOString(), // O backend deve cuidar disso com @CreationTimestamp
     };
 
     setIsLoading(true);
@@ -100,7 +108,8 @@ export default function IncluirProduto({ navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.keyboardAvoidingContainer}
     >
-      <View style={styles.container}>
+      {/* Adicionado ScrollView para formulários que podem ficar longos */}
+      <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
         <Text style={styles.title}>Incluir Novo Produto</Text>
 
         <Text style={styles.label}>Nome do Produto</Text>
@@ -124,17 +133,16 @@ export default function IncluirProduto({ navigation }) {
           editable={!isLoading}
         />
 
-        {formError && <Text style={styles.errorText}>{formError}</Text>}
-
         <Text style={styles.label}>Descrição</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, styles.inputMultiline]} // Estilo para multiline
           placeholder="Descrição detalhada do produto"
           placeholderTextColor={styles.placeholderText.color}
           onChangeText={setDescricao}
           value={descricao}
           multiline
           numberOfLines={3}
+          textAlignVertical="top" // Para alinhar texto no topo em multiline no Android
           editable={!isLoading}
         />
 
@@ -143,8 +151,8 @@ export default function IncluirProduto({ navigation }) {
           style={styles.input}
           placeholder="Ex: 299.90"
           placeholderTextColor={styles.placeholderText.color}
-          keyboardType="numeric"
-          onChangeText={setPreco}
+          keyboardType="numeric" // Permite ponto e vírgula dependendo do OS e config do teclado
+          onChangeText={setPreco} // Simples, sem máscara complexa por enquanto
           value={preco}
           editable={!isLoading}
         />
@@ -163,7 +171,7 @@ export default function IncluirProduto({ navigation }) {
           <Text style={styles.label}>Disponível Online?</Text>
           <Switch
             trackColor={{
-              false: "#767577",
+              false: styles.switchDisabledTrack?.color || "#767577",
               true: styles.switchEnabledTrack?.color || "#81b0ff",
             }}
             thumbColor={
@@ -171,12 +179,14 @@ export default function IncluirProduto({ navigation }) {
                 ? styles.switchEnabledThumb?.color || "#f5dd4b"
                 : styles.switchDisabledThumb?.color || "#f4f3f4"
             }
-            ios_backgroundColor="#3e3e3e"
+            ios_backgroundColor={styles.switchIosBackground?.color || "#3e3e3e"}
             onValueChange={setDisponivelOnline}
             value={disponivelOnline}
             disabled={isLoading}
           />
         </View>
+        
+        {formError && <Text style={styles.errorText}>{formError}</Text>}
 
         <Pressable
           onPress={handleIncluirProduto}
@@ -202,7 +212,7 @@ export default function IncluirProduto({ navigation }) {
             <Text style={styles.loadingText}>Salvando...</Text>
           </View>
         )}
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
