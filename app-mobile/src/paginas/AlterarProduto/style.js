@@ -1,73 +1,71 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
-// Paletas de Cores
+// Paletas de Cores (Verde e Preto como foco)
 const lightColors = {
-  background: '#F0F2F5',
-  text: '#1C1C1E',
-  primaryGreen: '#28A745',
-  primaryGreenDark: '#1E7E34',
-  secondaryBlack: '#343A40',
-  border: '#CED4DA',
+  background: '#F0F2F5', 
+  text: '#1C1C1E',       
+  primaryGreen: '#28A745', 
+  primaryGreenDark: '#1E7E34', 
+  secondaryBlack: '#343A40', 
+  border: '#CED4DA',     
   inputBackground: '#FFFFFF',
   inputText: '#495057',
   placeholderText: '#6C757D',
   buttonText: '#FFFFFF',
-  errorText: '#DC3545',
+  errorText: '#DC3545',   
   loadingOverlayBackground: 'rgba(0, 0, 0, 0.6)',
   loadingIndicator: '#FFFFFF',
   loadingText: '#FFFFFF',
-  titleText: '#28A745',
-  fabIconColor: '#FFFFFF', // usado no Switch
-  cardBackground: '#FFFFFF',
+  titleText: '#28A745', 
 };
 
 const darkColors = {
   background: '#121212',
-  text: '#E0E0E0',
+  text: '#E0E0E0',    
   primaryGreen: '#2ECC71',
   primaryGreenDark: '#27AE60',
   secondaryBlack: '#1C1C1E',
-  border: '#3A3A3C',
-  inputBackground: '#1E1E1E',
+  border: '#3A3A3C',     
+  inputBackground: '#1E1E1E', 
   inputText: '#E0E0E0',
   placeholderText: '#757575',
   buttonText: '#FFFFFF',
-  errorText: '#FF8A80',
+  errorText: '#FF8A80',    
   loadingOverlayBackground: 'rgba(0, 0, 0, 0.7)',
   loadingIndicator: '#2ECC71',
   loadingText: '#E0E0E0',
   titleText: '#2ECC71',
-  fabIconColor: '#2ECC71',
-  cardBackground: '#1E1E1E',
 };
+
+
 
 const getThemedStyles = (isDarkMode) => {
   const theme = isDarkMode ? darkColors : lightColors;
 
   return StyleSheet.create({
     keyboardAvoidingContainer: {
-      flex: 1,
+        flex: 1,
     },
     container: {
       flex: 1,
       backgroundColor: theme.background,
       paddingHorizontal: 24,
       paddingVertical: 20,
-      justifyContent: 'center',
+      justifyContent: 'center', 
     },
     title: {
-      fontSize: 28,
-      fontWeight: 'bold',
-      color: theme.titleText,
-      textAlign: 'center',
-      marginBottom: 30,
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: theme.titleText,
+        textAlign: 'center',
+        marginBottom: 30,
     },
     label: {
       fontSize: 16,
       fontWeight: '600',
       color: theme.text,
       marginBottom: 8,
-      marginLeft: 4,
+      marginLeft: 4, // Pequeno recuo para alinhar com o input
     },
     input: {
       backgroundColor: theme.inputBackground,
@@ -75,25 +73,25 @@ const getThemedStyles = (isDarkMode) => {
       height: 52,
       borderWidth: 1,
       borderColor: theme.border,
-      borderRadius: 12,
+      borderRadius: 12, // Bordas mais arredondadas
       paddingHorizontal: 16,
       marginBottom: 20,
       fontSize: 16,
-      shadowColor: theme.secondaryBlack,
+      shadowColor: theme.secondaryBlack, // Sombra sutil
       shadowOffset: { width: 0, height: 1 },
       shadowOpacity: isDarkMode ? 0.3 : 0.05,
       shadowRadius: 2,
       elevation: 1,
     },
-    placeholderText: {
-      color: theme.placeholderText,
+    placeholderText: { 
+        color: theme.placeholderText,
     },
     button: {
       backgroundColor: theme.primaryGreen,
       height: 52,
       borderRadius: 12,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: "center",
+      alignItems: "center",
       marginTop: 10,
       shadowColor: theme.primaryGreen,
       shadowOffset: { width: 0, height: 4 },
@@ -101,31 +99,31 @@ const getThemedStyles = (isDarkMode) => {
       shadowRadius: 5,
       elevation: 6,
     },
-    buttonDisabled: {
-      backgroundColor: theme.border,
+    buttonDisabled: { // Estilo para botão desabilitado
+      backgroundColor: theme.border, // Cor mais apagada
       elevation: 0,
       shadowOpacity: 0,
     },
     buttonText: {
       color: theme.buttonText,
       fontSize: 18,
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
     loadingOverlay: {
-      ...StyleSheet.absoluteFillObject,
+      ...StyleSheet.absoluteFillObject, // Cobre a tela inteira
       backgroundColor: theme.loadingOverlayBackground,
       justifyContent: 'center',
       alignItems: 'center',
-      zIndex: 10,
+      zIndex: 10, // Para ficar sobre os outros elementos
     },
-    loadingIndicator: {
-      color: theme.loadingIndicator,
+    loadingIndicator: { // Apenas para passar a cor para o ActivityIndicator
+        color: theme.loadingIndicator,
     },
     loadingText: {
-      marginTop: 10,
-      fontSize: 16,
-      color: theme.loadingText,
-      fontWeight: '500',
+        marginTop: 10,
+        fontSize: 16,
+        color: theme.loadingText,
+        fontWeight: '500',
     },
     errorText: {
       color: theme.errorText,
@@ -134,19 +132,20 @@ const getThemedStyles = (isDarkMode) => {
       fontSize: 14,
       fontWeight: '500',
     },
-    switchContainer: {
+
+    switchContainer: { // Novo
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: 20,
-      paddingHorizontal: 4,
+      paddingHorizontal: 4, // Ajuste conforme necessário
     },
-    // Estilos dinâmicos para Switch personalizado
+
     switchEnabledTrack: { color: theme.primaryGreen },
-    switchDisabledTrack: { color: theme.border },
+    switchDisabledTrack: { color: theme.border },     
     switchEnabledThumb: { color: theme.fabIconColor },
     switchDisabledThumb: { color: theme.cardBackground },
-    switchIosBackground: { color: theme.border },
+    switchIosBackground: { color: theme.border }
   });
 };
 

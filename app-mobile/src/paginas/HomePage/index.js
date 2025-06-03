@@ -48,18 +48,22 @@ const HomePage = () => {
     return unsubscribe;
   }, [navigation, buscarProdutosDestaque]);
 
-  const renderCarouselItem = ({ item }) => (
-    <TouchableOpacity style={styles.carouselItem} activeOpacity={0.8}>
-      <Image
-        source={{ uri: item.imagemUrl }}
-        style={styles.carouselImage}
-        resizeMode="cover"
-        onError={(e) =>
-          console.warn(`Erro ao carregar imagem: ${item.imagemUrl}`, e.nativeEvent.error)
-        }
-      />
-    </TouchableOpacity>
-  );
+    const renderCarouselItem = ({ item }) => (
+        <TouchableOpacity
+            style={styles.carouselItem}
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('InformacoesProduto', { produto: item })} 
+        >
+            <Image
+                source={{ uri: item.imagemUrl }}
+                style={styles.carouselImage}
+                resizeMode="cover"
+                onError={(e) => console.warn(`Erro ao carregar imagem do carrossel: ${item.imagemUrl}`, e.nativeEvent.error)}
+            />
+       
+            <Text style={styles.carouselItemTitle}>{item.nome}</Text>
+        </TouchableOpacity>
+    );
 
   return (
     <ScrollView

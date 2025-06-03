@@ -137,7 +137,7 @@ export default function AlterarProduto({ navigation, route }) {
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.title}>Alterar Produto</Text>
+        <Text style={styles.title}>Alterar Produto</Text> 
 
         <Text style={styles.label}>Nome do Produto</Text>
         <TextInput
@@ -198,15 +198,15 @@ export default function AlterarProduto({ navigation, route }) {
           <Text style={styles.label}>Disponível Online?</Text>
           <Switch
             trackColor={{
-              false: styles.switchDisabledTrack?.color || "#767577",
-              true: styles.switchEnabledTrack?.color || "#81b0ff"
+              false: styles.switchDisabledTrack?.color,
+              true: styles.switchEnabledTrack?.color 
             }}
             thumbColor={
               disponivelOnline
-                ? styles.switchEnabledThumb?.color || "#f5dd4b"
-                : styles.switchDisabledThumb?.color || "#f4f3f4"
+                ? styles.switchEnabledThumb?.color 
+                : styles.switchDisabledThumb?.color 
             }
-            ios_backgroundColor={styles.switchIosBackground?.color || "#3e3e3e"}
+            ios_backgroundColor={styles.switchIosBackground?.color}
             onValueChange={setDisponivelOnline}
             value={disponivelOnline}
             disabled={isLoading}
