@@ -32,5 +32,5 @@ Projeto de faculdade: app mobile em React Native (Expo) para gerenciar produtos 
 1. Instale Node.js, Expo CLI e Git.  
 2. Clone o repo:  
    ```bash
-   git clone <URL>
+   git clone https://github.com/Th3AI99la/InfoPrimeApp
    cd InfoPrimeApp
