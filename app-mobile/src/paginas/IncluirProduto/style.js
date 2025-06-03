@@ -1,9 +1,6 @@
-// Em: IncluirProduto/style.js
-// (Este é o mesmo conteúdo que foi sugerido para AlterarProduto/style.js)
-
 import { StyleSheet } from 'react-native';
 
-// Paletas de Cores (Verde e Preto como foco)
+
 const lightColors = {
   background: '#F0F2F5',
   text: '#1C1C1E',
@@ -13,7 +10,7 @@ const lightColors = {
   border: '#CED4DA',
   inputBackground: '#FFFFFF',
   inputText: '#495057',
-  placeholderText: '#6C757D', // Cor para o placeholder
+  placeholderText: '#6C757D', 
   buttonText: '#FFFFFF',
   errorText: '#DC3545',
   loadingOverlayBackground: 'rgba(0, 0, 0, 0.6)',
@@ -31,7 +28,7 @@ const darkColors = {
   border: '#3A3A3C',
   inputBackground: '#1E1E1E',
   inputText: '#E0E0E0',
-  placeholderText: '#757575', // Cor para o placeholder no modo escuro
+  placeholderText: '#757575',
   buttonText: '#FFFFFF',
   errorText: '#FF8A80',
   loadingOverlayBackground: 'rgba(0, 0, 0, 0.7)',
@@ -44,7 +41,7 @@ const getThemedStyles = (isDarkMode) => {
   const theme = isDarkMode ? darkColors : lightColors;
 
   return StyleSheet.create({
-    keyboardAvoidingContainer: { // Adicionado para o KeyboardAvoidingView
+    keyboardAvoidingContainer: { 
         flex: 1,
     },
     container: {
@@ -84,7 +81,7 @@ const getThemedStyles = (isDarkMode) => {
       shadowRadius: 2,
       elevation: 1,
     },
-    placeholderText: { // Adicionado para poder referenciar a cor do placeholder
+    placeholderText: { 
         color: theme.placeholderText,
     },
     button: {

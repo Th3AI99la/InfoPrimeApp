@@ -1,19 +1,18 @@
-// Em: ListarProduto/style.js
 
-import { StyleSheet } from 'react-native'; // Removido Dimensions não utilizado
+import { StyleSheet } from 'react-native'; 
 
-// Paletas de Cores (Verifique se estão centralizadas ou defina-as aqui consistentemente)
+
 const lightColors = {
   background: '#F0F2F5',
   text: '#1C1C1E',
   primaryGreen: '#28A745',
-  secondaryText: '#555555', // Corrigido de '#555' para consistência de 6 dígitos se preferir
+  secondaryText: '#555555', 
   cardBackground: '#FFFFFF',
   borderColor: '#E0E0E0',
   deleteIconColor: '#DC3545',
   fabBackground: '#28A745',
   fabIconColor: '#FFFFFF',
-  emptyText: '#777777', // Corrigido de '#777'
+  emptyText: '#777777', 
   errorText: '#DC3545',
   retryButtonBackground: '#28A745',
   retryButtonText: '#FFFFFF',
@@ -24,8 +23,7 @@ const lightColors = {
   onlineDotColor: '#28A745',
   offlineDotColor: '#DC3545',
   placeholderIconColor: '#a0a0a0',
-  // Adicionando uma cor para sombra no modo escuro, se diferente do primaryGreen
-  darkShadowColor: 'rgba(0,0,0,0.5)', // Exemplo de sombra escura mais neutra
+  darkShadowColor: 'rgba(0,0,0,0.5)', 
 };
 
 const darkColors = {
@@ -38,19 +36,18 @@ const darkColors = {
   deleteIconColor: '#FF8A80',
   fabBackground: '#2ECC71',
   fabIconColor: '#121212',
-  emptyText: '#999999', // Corrigido de '#999'
+  emptyText: '#999999', 
   errorText: '#FF8A80',
   retryButtonBackground: '#2ECC71',
   retryButtonText: '#121212',
   refreshControl: '#2ECC71',
   loadingIndicator: '#2ECC71',
   loadingText: '#E0E0E0',
-  produtoQuantidadeText: '#888888', // Corrigido de '#888'
+  produtoQuantidadeText: '#888888', 
   onlineDotColor: '#2ECC71',
   offlineDotColor: '#FF8A80',
   placeholderIconColor: '#707070',
-  // Cor para sombra no modo escuro
-  darkShadowColor: 'rgba(0,0,0,0.7)', // Exemplo, pode ser a mesma primaryGreen ou mais sutil
+  darkShadowColor: 'rgba(0,0,0,0.7)', 
 };
 
 
@@ -69,34 +66,31 @@ const getThemedStyles = (isDarkMode) => {
     listContentContainer: {
         paddingHorizontal: 16,
         paddingTop: 10,
-        paddingBottom: 80, // Espaço para o FAB não cobrir o último item
+        paddingBottom: 80, 
     },
     produtoItemContainer: {
         flexDirection: "row",
-        // justifyContent: "space-between", // Removido na sugestão anterior para mais controle
         alignItems: "center",
         backgroundColor: theme.cardBackground,
         paddingVertical: 16,
-        paddingHorizontal: 20, // Ajustado para paddingHorizontal consistente
+        paddingHorizontal: 20, 
         borderRadius: 12,
         marginBottom: 12,
-        // Sugestão para shadowColor:
-        shadowColor: isDarkMode ? theme.darkShadowColor : '#000', // Usar uma cor de sombra dedicada para modo escuro ou manter preto
-        // shadowColor: isDarkMode ? theme.primaryGreen : '#000', // Sua opção anterior
+        shadowColor: isDarkMode ? theme.darkShadowColor : '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: isDarkMode ? 0.35 : 0.1, // Aumentei um pouco a opacidade da sombra no modo escuro
+        shadowOpacity: isDarkMode ? 0.35 : 0.1, 
         shadowRadius: 4,
         elevation: 3,
         borderWidth: isDarkMode ? 1 : 0,
         borderColor: theme.borderColor,
     },
-    // Adicionando estilos da sugestão anterior que podem ter sido omitidos na sua colagem:
+
     produtoImagem: {
         width: 70,
         height: 70,
         borderRadius: 8,
         marginRight: 12,
-        backgroundColor: theme.borderColor, // Fundo enquanto carrega
+        backgroundColor: theme.borderColor, 
     },
     produtoImagemPlaceholder: {
         width: 70,
@@ -109,12 +103,12 @@ const getThemedStyles = (isDarkMode) => {
     },
     placeholderIcon: { color: theme.placeholderIconColor },
     produtoInfoContainer: {
-        flex: 1, // Para ocupar o espaço restante
+        flex: 1, 
         justifyContent: 'center',
     },
-    produtoNomeContainer: { // Este pode não ser mais necessário se produtoInfoContainer já faz o papel
+    produtoNomeContainer: { 
         flex: 1,
-        marginRight: 15, // Se produtoAcoesContainer estiver à direita
+        marginRight: 15, 
     },
     produtoNome: {
         fontSize: 17,
@@ -122,7 +116,6 @@ const getThemedStyles = (isDarkMode) => {
         color: theme.text,
         marginBottom: 4,
     },
-    // Estilo para o Preço (garantindo que use theme.primaryGreen)
     produtoPreco: {
         fontSize: 15,
         fontWeight: 'bold',
@@ -132,9 +125,8 @@ const getThemedStyles = (isDarkMode) => {
     produtoQuantidade: {
         fontSize: 14,
         color: theme.produtoQuantidadeText,
-        marginBottom: 6, // Adicionado para espaçamento antes da disponibilidade
+        marginBottom: 6,
     },
-    // Estilos para Disponibilidade
     disponibilidadeContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -145,32 +137,27 @@ const getThemedStyles = (isDarkMode) => {
         borderRadius: 4,
         marginRight: 6,
     },
-    onlineDot: { color: theme.onlineDotColor }, // Usado para pegar a cor para o backgroundColor no componente
-    offlineDot: { color: theme.offlineDotColor }, // Usado para pegar a cor para o backgroundColor no componente
+    onlineDot: { color: theme.onlineDotColor },
+    offlineDot: { color: theme.offlineDotColor }, 
     disponibilidadeText: {
         fontSize: 13,
-        color: theme.secondaryText, // Garante que use a cor secundária do tema
+        color: theme.secondaryText, 
     },
-    // Container para os botões de ação (se houver, como o de deletar)
     produtoAcoesContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        // marginLeft: 'auto', // Se quiser empurrar para a direita
     },
-    acaoButton: { // Estilo comum para botões de ação no item
+    acaoButton: {
         padding: 8,
-        marginLeft: 8, // Espaço se houver múltiplos botões de ação
+        marginLeft: 8, 
     },
-    deleteProdutoButton: { // Este estilo parece não estar sendo usado no renderItem mais recente (usamos acaoButton)
+    deleteProdutoButton: { 
         padding: 8,
         borderRadius: 20,
     },
     deleteIcon: {
         color: theme.deleteIconColor,
     },
-    // editIcon: { // Adicione se tiver um botão de editar
-    //     color: theme.primaryGreen,
-    // },
     addButton: {
         position: "absolute",
         bottom: 30,
@@ -183,9 +170,7 @@ const getThemedStyles = (isDarkMode) => {
         borderRadius: 30,
         justifyContent: "center",
         alignItems: "center",
-        // Sugestão para shadowColor do FAB:
-        shadowColor: isDarkMode ? theme.primaryGreen : '#000', // Sombra verde no modo escuro para destaque, ou preto
-        // shadowColor: '#000', // Sua opção anterior
+        shadowColor: isDarkMode ? theme.primaryGreen : '#000', 
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 4,

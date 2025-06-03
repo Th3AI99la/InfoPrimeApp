@@ -1,22 +1,20 @@
-import React, { useState, useRef } from "react"; // Adicionado useRef para animatedScale
+import React, { useState, useRef } from "react"; 
 import {
   View,
   Text,
   TextInput,
-  // StyleSheet, // Removido se getThemedStyles já lida com tudo
   Alert,
   ActivityIndicator,
-  // useColorScheme, // 👈 REMOVER
   Pressable,
   Animated,
   KeyboardAvoidingView,
   Platform,
   Switch,
-  ScrollView // Adicionado para conteúdos longos
+  ScrollView 
 } from "react-native";
 import getThemedStyles from "./style";
 import api from "../../services/api";
-import { useTheme } from '../../context/ThemeContext'; // 👈 IMPORTAR useTheme
+import { useTheme } from '../../context/ThemeContext'; 
 
 export default function IncluirProduto({ navigation }) {
   const [nome, setNome] = useState("");
@@ -29,14 +27,12 @@ export default function IncluirProduto({ navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [formError, setFormError] = useState(null);
 
-  const { themeMode } = useTheme(); // 👈 USAR themeMode do CONTEXTO
-  const styles = getThemedStyles(themeMode === "dark"); // 👈 USAR themeMode do CONTEXTO
+  const { themeMode } = useTheme(); 
+  const styles = getThemedStyles(themeMode === "dark");
 
-  const animatedScale = useRef(new Animated.Value(1)).current; // Usar useRef para Animated.Value
+  const animatedScale = useRef(new Animated.Value(1)).current; 
 
-  // ... (resto do seu componente IncluirProduto, como handlePressIn, handlePressOut, handleIncluirProduto)
-  // A lógica interna do componente não precisa mudar.
-
+  // Funções para animação de pressionamento do botão
   const handlePressIn = () => {
     Animated.spring(animatedScale, {
       toValue: 0.96,
@@ -78,14 +74,15 @@ export default function IncluirProduto({ navigation }) {
 
     const novoProduto = {
       nome: nome.trim(),
-      quantidade: quantidadeNum, // No backend, este campo é 'quantidade'
+      quantidade: quantidadeNum, 
       descricao: descricao.trim(),
       preco: precoNum,
       imagemUrl: imagemUrl.trim(),
       disponivelOnline,
-      // dataCadastro: new Date().toISOString(), // O backend deve cuidar disso com @CreationTimestamp
+
     };
 
+    // Verifica se a URL da imagem é válida
     setIsLoading(true);
     try {
       await api.post("/produtos", novoProduto);
@@ -108,7 +105,6 @@ export default function IncluirProduto({ navigation }) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.keyboardAvoidingContainer}
     >
-      {/* Adicionado ScrollView para formulários que podem ficar longos */}
       <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
         <Text style={styles.title}>Incluir Novo Produto</Text>
 
@@ -135,14 +131,14 @@ export default function IncluirProduto({ navigation }) {
 
         <Text style={styles.label}>Descrição</Text>
         <TextInput
-          style={[styles.input, styles.inputMultiline]} // Estilo para multiline
+          style={[styles.input, styles.inputMultiline]}
           placeholder="Descrição detalhada do produto"
           placeholderTextColor={styles.placeholderText.color}
           onChangeText={setDescricao}
           value={descricao}
           multiline
           numberOfLines={3}
-          textAlignVertical="top" // Para alinhar texto no topo em multiline no Android
+          textAlignVertical="top" 
           editable={!isLoading}
         />
 
@@ -151,8 +147,8 @@ export default function IncluirProduto({ navigation }) {
           style={styles.input}
           placeholder="Ex: 299.90"
           placeholderTextColor={styles.placeholderText.color}
-          keyboardType="numeric" // Permite ponto e vírgula dependendo do OS e config do teclado
-          onChangeText={setPreco} // Simples, sem máscara complexa por enquanto
+          keyboardType="numeric"
+          onChangeText={setPreco} 
           value={preco}
           editable={!isLoading}
         />

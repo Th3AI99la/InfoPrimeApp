@@ -7,7 +7,6 @@ import {
     SafeAreaView,
     Alert,
     ActivityIndicator,
-    // useColorScheme, // 👈 REMOVER
     Pressable,
     Animated,
     Image,
@@ -16,7 +15,7 @@ import {
 import api from "../../services/api";
 import getThemedStyles from "./style";
 import { FontAwesome } from "@expo/vector-icons";
-import { useTheme } from '../../context/ThemeContext'; // 👈 IMPORTAR useTheme
+import { useTheme } from '../../context/ThemeContext';
 
 export default function ListarProduto({ navigation }) {
     const [produtos, setProdutos] = useState([]);
@@ -24,11 +23,9 @@ export default function ListarProduto({ navigation }) {
     const [isLoadingList, setIsLoadingList] = useState(false);
     const [listError, setListError] = useState(null);
 
-    const { themeMode } = useTheme(); // 👈 USAR themeMode do CONTEXTO
-    const styles = getThemedStyles(themeMode === "dark"); // 👈 USAR themeMode do CONTEXTO
+    const { themeMode } = useTheme(); 
+    const styles = getThemedStyles(themeMode === "dark");
 
-    // ... (resto do seu componente ListarProduto, que já estava usando 'styles' corretamente)
-    // A lógica interna do componente não precisa mudar, apenas a origem do 'themeMode' para gerar 'styles'.
     const addButtonScale = useRef(new Animated.Value(1)).current;
 
     const handleAddButtonPressIn = () => {
@@ -56,13 +53,11 @@ export default function ListarProduto({ navigation }) {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener("focus", () => {
-            // Chamando a função atualizarLista diretamente ao invés de apenas a referência
-            // para garantir que a versão mais recente (com o useCallback correto) seja usada.
             atualizarLista();
         });
-        atualizarLista(); // Chamada inicial
+        atualizarLista(); 
         return unsubscribe;
-    }, [navigation, atualizarLista]); // Dependência de atualizarLista é importante
+    }, [navigation, atualizarLista]); 
 
     const confirmarExclusaoProduto = (item) => {
         Alert.alert(
