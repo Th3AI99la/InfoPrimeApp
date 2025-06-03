@@ -40,12 +40,12 @@ export default function AlterarProduto({ navigation, route }) {
     const num = parseFloat(String(price).replace(',', '.'));
     return isNaN(num) ? "" : num.toFixed(2).replace(".", ",");
   };
+
   const [preco, setPreco] = useState(formatPriceForInput(precoInicial));
   const [imagemUrl, setImagemUrl] = useState(imagemUrlInicial || "");
   const [disponivelOnline, setDisponivelOnline] = useState(
     disponivelOnlineInicial !== undefined ? disponivelOnlineInicial : false
   );
-
   const [isLoading, setIsLoading] = useState(false);
   const [formError, setFormError] = useState(null);
 
@@ -53,14 +53,30 @@ export default function AlterarProduto({ navigation, route }) {
   const styles = getThemedStyles(themeMode === "dark");
 
   const animatedScale = useRef(new Animated.Value(1)).current;
+  const formOpacity = useRef(new Animated.Value(0)).current;
+  const formTranslateY = useRef(new Animated.Value(20)).current;
   const isMounted = useRef(true);
 
   useEffect(() => {
     isMounted.current = true;
+    Animated.parallel([
+      Animated.timing(formOpacity, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.spring(formTranslateY, {
+        toValue: 0,
+        speed: 12,
+        bounciness: 5,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
     return () => {
       isMounted.current = false;
     };
-  }, []);
+  }, [formOpacity, formTranslateY]);
 
   const handlePressIn = () => {
     Animated.spring(animatedScale, {
@@ -115,7 +131,6 @@ export default function AlterarProduto({ navigation, route }) {
         navigation.navigate("ListarProduto");
       }
     } catch (error) {
-      console.error("Erro ao alterar produto: ", error);
       const errorMessage =
         error.response?.data?.message ||
         error.message ||
@@ -136,107 +151,110 @@ export default function AlterarProduto({ navigation, route }) {
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>Alterar Produto</Text> 
+        <Animated.View style={{ opacity: formOpacity, transform: [{ translateY: formTranslateY }] }}>
+          <Text style={styles.title}>Alterar Produto</Text>
 
-        <Text style={styles.label}>Nome do Produto</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite o nome do produto"
-          placeholderTextColor={styles.placeholderText.color}
-          onChangeText={setNome}
-          value={nome}
-          editable={!isLoading}
-        />
-
-        <Text style={styles.label}>Quantidade</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Digite a quantidade"
-          placeholderTextColor={styles.placeholderText.color}
-          keyboardType="numeric"
-          onChangeText={(text) => setQuantidade(text.replace(/[^0-9]/g, ""))}
-          value={quantidade}
-          editable={!isLoading}
-        />
-
-        <Text style={styles.label}>Descrição</Text>
-        <TextInput
-          style={[styles.input, styles.inputMultiline]}
-          placeholder="Descrição detalhada do produto"
-          placeholderTextColor={styles.placeholderText.color}
-          onChangeText={setDescricao}
-          value={descricao}
-          multiline
-          numberOfLines={3}
-          textAlignVertical="top"
-          editable={!isLoading}
-        />
-
-        <Text style={styles.label}>Preço (R$)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ex: 299,90"
-          placeholderTextColor={styles.placeholderText.color}
-          keyboardType="numeric"
-          onChangeText={setPreco}
-          value={preco}
-          editable={!isLoading}
-        />
-
-        <Text style={styles.label}>URL da Imagem</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="https://exemplo.com/imagem.jpg"
-          placeholderTextColor={styles.placeholderText.color}
-          onChangeText={setImagemUrl}
-          value={imagemUrl}
-          editable={!isLoading}
-        />
-
-        <View style={styles.switchContainer}>
-          <Text style={styles.label}>Disponível Online?</Text>
-          <Switch
-            trackColor={{
-              false: styles.switchDisabledTrack?.color,
-              true: styles.switchEnabledTrack?.color 
-            }}
-            thumbColor={
-              disponivelOnline
-                ? styles.switchEnabledThumb?.color 
-                : styles.switchDisabledThumb?.color 
-            }
-            ios_backgroundColor={styles.switchIosBackground?.color}
-            onValueChange={setDisponivelOnline}
-            value={disponivelOnline}
-            disabled={isLoading}
+          <Text style={styles.label}>Nome do Produto</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Digite o nome do produto"
+            placeholderTextColor={styles.placeholderText.color}
+            onChangeText={setNome}
+            value={nome}
+            editable={!isLoading}
           />
-        </View>
 
-        {formError && <Text style={styles.errorText}>{formError}</Text>}
+          <Text style={styles.label}>Quantidade</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Digite a quantidade"
+            placeholderTextColor={styles.placeholderText.color}
+            keyboardType="numeric"
+            onChangeText={(text) => setQuantidade(text.replace(/[^0-9]/g, ""))}
+            value={quantidade}
+            editable={!isLoading}
+          />
 
-        <Pressable
-          onPress={handleAlterarProduto}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-          disabled={isLoading}
-          style={({ pressed }) => [
-            styles.button,
-            isLoading && styles.buttonDisabled
-          ]}
-        >
-          <Animated.View style={{ transform: [{ scale: animatedScale }] }}>
-            <Text style={styles.buttonText}>Salvar Alterações</Text>
-          </Animated.View>
-        </Pressable>
+          <Text style={styles.label}>Descrição</Text>
+          <TextInput
+            style={[styles.input, styles.inputMultiline]}
+            placeholder="Descrição detalhada do produto"
+            placeholderTextColor={styles.placeholderText.color}
+            onChangeText={setDescricao}
+            value={descricao}
+            multiline
+            numberOfLines={3}
+            textAlignVertical="top"
+            editable={!isLoading}
+          />
 
-        {isLoading && (
-          <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="large" color={styles.loadingIndicator.color} />
-            <Text style={styles.loadingText}>Salvando...</Text>
+          <Text style={styles.label}>Preço (R$)</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Ex: 299,90"
+            placeholderTextColor={styles.placeholderText.color}
+            keyboardType="numeric"
+            onChangeText={setPreco}
+            value={preco}
+            editable={!isLoading}
+          />
+
+          <Text style={styles.label}>URL da Imagem</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="https://exemplo.com/imagem.jpg"
+            placeholderTextColor={styles.placeholderText.color}
+            onChangeText={setImagemUrl}
+            value={imagemUrl}
+            editable={!isLoading}
+          />
+
+          <View style={styles.switchContainer}>
+            <Text style={styles.label}>Disponível Online?</Text>
+            <Switch
+              trackColor={{
+                false: styles.switchDisabledTrack?.color || "#767577",
+                true: styles.switchEnabledTrack?.color
+              }}
+              thumbColor={
+                disponivelOnline
+                  ? styles.switchEnabledThumb?.color
+                  : styles.switchDisabledThumb?.color
+              }
+              ios_backgroundColor={styles.switchIosBackground?.color || "#3e3e3e"}
+              onValueChange={setDisponivelOnline}
+              value={disponivelOnline}
+              disabled={isLoading}
+            />
           </View>
-        )}
+
+          {formError && <Text style={styles.errorText}>{formError}</Text>}
+
+          <Pressable
+            onPress={handleAlterarProduto}
+            onPressIn={handlePressIn}
+            onPressOut={handlePressOut}
+            disabled={isLoading}
+            style={({ pressed }) => [
+              styles.button,
+              isLoading && styles.buttonDisabled
+            ]}
+          >
+            <Animated.View style={{ transform: [{ scale: animatedScale }] }}>
+              <Text style={styles.buttonText}>Salvar Alterações</Text>
+            </Animated.View>
+          </Pressable>
+        </Animated.View>
       </ScrollView>
+
+      {isLoading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color={styles.loadingIndicator.color} />
+          <Text style={styles.loadingText}>Salvando...</Text>
+        </View>
+      )}
     </KeyboardAvoidingView>
   );
 }

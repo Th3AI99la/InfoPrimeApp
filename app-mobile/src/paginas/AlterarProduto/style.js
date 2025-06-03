@@ -1,43 +1,55 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native'; 
 
-// Paletas de Cores (Verde e Preto como foco)
+
 const lightColors = {
-  background: '#F0F2F5', 
-  text: '#1C1C1E',       
-  primaryGreen: '#28A745', 
-  primaryGreenDark: '#1E7E34', 
-  secondaryBlack: '#343A40', 
-  border: '#CED4DA',     
+  background: '#F0F2F5',
+  text: '#1C1C1E',
+  primaryGreen: '#28A745',
+  primaryGreenDark: '#1E7E34',
+  secondaryBlack: '#343A40',
+  border: '#CED4DA',
   inputBackground: '#FFFFFF',
   inputText: '#495057',
   placeholderText: '#6C757D',
   buttonText: '#FFFFFF',
-  errorText: '#DC3545',   
+  errorText: '#DC3545',
   loadingOverlayBackground: 'rgba(0, 0, 0, 0.6)',
   loadingIndicator: '#FFFFFF',
   loadingText: '#FFFFFF',
-  titleText: '#28A745', 
+  titleText: '#28A745',
+
+  //Switch
+  switchEnabledTrackColor: '#A5D6A7',
+  switchEnabledThumbColor: '#28A745',
+  switchDisabledTrackColor: '#BDBDBD',
+  switchDisabledThumbColor: '#F5F5F5',
+  switchIosBgColor: '#E0E0E0',
 };
 
 const darkColors = {
   background: '#121212',
-  text: '#E0E0E0',    
+  text: '#E0E0E0',
   primaryGreen: '#2ECC71',
   primaryGreenDark: '#27AE60',
-  secondaryBlack: '#1C1C1E',
-  border: '#3A3A3C',     
-  inputBackground: '#1E1E1E', 
+  secondaryBlack: '#000000', 
+  border: '#3A3A3C',
+  inputBackground: '#1E1E1E',
   inputText: '#E0E0E0',
   placeholderText: '#757575',
-  buttonText: '#FFFFFF',
-  errorText: '#FF8A80',    
+  buttonText: '#FFFFFF', 
+  errorText: '#FF8A80',
   loadingOverlayBackground: 'rgba(0, 0, 0, 0.7)',
   loadingIndicator: '#2ECC71',
   loadingText: '#E0E0E0',
   titleText: '#2ECC71',
+
+  //Switch
+  switchEnabledTrackColor: '#4A7C59',
+  switchEnabledThumbColor: '#2ECC71',
+  switchDisabledTrackColor: '#424242',
+  switchDisabledThumbColor: '#BDBDBD',
+  switchIosBgColor: '#333333',
 };
-
-
 
 const getThemedStyles = (isDarkMode) => {
   const theme = isDarkMode ? darkColors : lightColors;
@@ -45,27 +57,27 @@ const getThemedStyles = (isDarkMode) => {
   return StyleSheet.create({
     keyboardAvoidingContainer: {
         flex: 1,
+        backgroundColor: theme.background, 
     },
-    container: {
-      flex: 1,
-      backgroundColor: theme.background,
+
+    scrollContainer: {
       paddingHorizontal: 24,
-      paddingVertical: 20,
-      justifyContent: 'center', 
+      paddingVertical: 20, 
+      flexGrow: 1,      
     },
     title: {
-        fontSize: 28,
+        fontSize: 26, 
         fontWeight: 'bold',
         color: theme.titleText,
         textAlign: 'center',
-        marginBottom: 30,
+        marginBottom: 25,
+        marginTop: 10,   
     },
     label: {
       fontSize: 16,
       fontWeight: '600',
       color: theme.text,
-      marginBottom: 8,
-      marginLeft: 4, // Pequeno recuo para alinhar com o input
+      marginBottom: 10,
     },
     input: {
       backgroundColor: theme.inputBackground,
@@ -73,50 +85,70 @@ const getThemedStyles = (isDarkMode) => {
       height: 52,
       borderWidth: 1,
       borderColor: theme.border,
-      borderRadius: 12, // Bordas mais arredondadas
+      borderRadius: 10, 
       paddingHorizontal: 16,
-      marginBottom: 20,
+      marginBottom: 22,
       fontSize: 16,
-      shadowColor: theme.secondaryBlack, // Sombra sutil
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: isDarkMode ? 0.3 : 0.05,
-      shadowRadius: 2,
-      elevation: 1,
+      shadowColor: theme.secondaryBlack,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: isDarkMode ? 0.25 : 0.08,
+      shadowRadius: 3,
+      elevation: isDarkMode ? 2 : 1,
+    },
+    inputMultiline: {
+        height: 100, 
+        paddingTop: 12, 
     },
     placeholderText: { 
         color: theme.placeholderText,
     },
+    switchContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 25, // Ajustado
+      paddingVertical: 10,
+
+    },
+
+    switchEnabledTrack:   { color: theme.switchEnabledTrackColor },
+    switchEnabledThumb:   { color: theme.switchEnabledThumbColor },
+    switchDisabledTrack:  { color: theme.switchDisabledTrackColor },
+    switchDisabledThumb:  { color: theme.switchDisabledThumbColor },
+    switchIosBackground:  { color: theme.switchIosBgColor },
+
     button: {
       backgroundColor: theme.primaryGreen,
       height: 52,
-      borderRadius: 12,
+      borderRadius: 26, 
       justifyContent: "center",
       alignItems: "center",
-      marginTop: 10,
+      marginTop: 15, 
+      marginBottom: 20, 
       shadowColor: theme.primaryGreen,
       shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.3,
+      shadowOpacity: isDarkMode ? 0.4 : 0.3,
       shadowRadius: 5,
       elevation: 6,
     },
-    buttonDisabled: { // Estilo para botão desabilitado
-      backgroundColor: theme.border, // Cor mais apagada
+    buttonDisabled: {
+      backgroundColor: theme.border,
       elevation: 0,
       shadowOpacity: 0,
     },
     buttonText: {
       color: theme.buttonText,
-      fontSize: 18,
+      fontSize: 17,
       fontWeight: "bold",
     },
     loadingOverlay: {
-      ...StyleSheet.absoluteFillObject, // Cobre a tela inteira
+      ...StyleSheet.absoluteFillObject,
       backgroundColor: theme.loadingOverlayBackground,
       justifyContent: 'center',
       alignItems: 'center',
-      zIndex: 10, // Para ficar sobre os outros elementos
+      zIndex: 10,
     },
-    loadingIndicator: { // Apenas para passar a cor para o ActivityIndicator
+    loadingIndicator: { 
         color: theme.loadingIndicator,
     },
     loadingText: {
@@ -131,21 +163,7 @@ const getThemedStyles = (isDarkMode) => {
       marginBottom: 15,
       fontSize: 14,
       fontWeight: '500',
-    },
-
-    switchContainer: { // Novo
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: 20,
-      paddingHorizontal: 4, // Ajuste conforme necessário
-    },
-
-    switchEnabledTrack: { color: theme.primaryGreen },
-    switchDisabledTrack: { color: theme.border },     
-    switchEnabledThumb: { color: theme.fabIconColor },
-    switchDisabledThumb: { color: theme.cardBackground },
-    switchIosBackground: { color: theme.border }
+    }
   });
 };
 
